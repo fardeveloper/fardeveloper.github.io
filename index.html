@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Alex Rivera — Academic Homepage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET & TOKENS ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f7f5f0;
+      --surface:   #ffffff;
+      --ink:       #1a1714;
+      --ink-light: #5c5752;
+      --ink-faint: #9e9992;
+      --accent:    #2a4a7f;
+      --accent-2:  #b5482a;
+      --rule:      #dedad3;
+      --nav-w:     260px;
+      --font-serif: 'EB Garamond', Georgia, serif;
+      --font-sans:  'Instrument Sans', sans-serif;
+      --font-mono:  'JetBrains Mono', monospace;
+      --radius:     4px;
+      --shadow:     0 2px 16px rgba(0,0,0,.07);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.72;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR NAV ─────────────────────────────────────────────── */
+    #sidebar {
+      width: var(--nav-w);
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--rule);
+      position: fixed;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 2.4rem 1.6rem 2rem;
+      z-index: 100;
+      transition: transform .3s ease;
+    }
+
+    .profile-wrap {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.8rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c9d8ef 0%, #dce9f8 100%);
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem;
+      color: var(--accent);
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 0 2px var(--rule);
+      overflow: hidden;
+    }
+
+    .profile-name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .profile-role {
+      font-family: var(--font-sans);
+      font-size: .75rem;
+      color: var(--ink-light);
+      margin-top: .3rem;
+      letter-spacing: .02em;
+    }
+
+    .profile-org {
+      font-family: var(--font-sans);
+      font-size: .72rem;
+      color: var(--accent);
+      margin-top: .15rem;
+    }
+
+    nav ul { list-style: none; }
+    nav li { margin: .15rem 0; }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .5rem .7rem;
+      border-radius: var(--radius);
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      font-weight: 500;
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: background .18s, color .18s;
+      letter-spacing: .015em;
+    }
+
+    nav a .nav-icon { font-size: 1rem; opacity: .7; }
+    nav a:hover, nav a.active {
+      background: #eef2f8;
+      color: var(--accent);
+    }
+    nav a.active { font-weight: 600; }
+
+    .nav-section-label {
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      padding: 1rem .7rem .3rem;
+    }
+
+    .sidebar-links {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .sidebar-links a {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: var(--ink-faint);
+      text-decoration: none;
+      padding: .25rem .5rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      transition: color .15s, border-color .15s;
+    }
+    .sidebar-links a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── MOBILE TOGGLE ───────────────────────────────────────────── */
+    #menu-toggle {
+      display: none;
+      position: fixed; top: 1rem; left: 1rem;
+      z-index: 200;
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: .45rem .55rem;
+      cursor: pointer;
+      font-size: 1.1rem;
+      line-height: 1;
+      box-shadow: var(--shadow);
+    }
+
+    /* ── MAIN CONTENT ────────────────────────────────────────────── */
+    #main {
+      margin-left: var(--nav-w);
+      flex: 1;
+      padding: 3rem 4rem 5rem;
+      max-width: 900px;
+    }
+
+    /* ── PAGES ───────────────────────────────────────────────────── */
+    .page { display: none; animation: fadeUp .35s ease both; }
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── TYPOGRAPHY ──────────────────────────────────────────────── */
+    h1 {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      font-weight: 500;
+      line-height: 1.18;
+      color: var(--ink);
+      margin-bottom: .5rem;
+    }
+
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin: 2.4rem 0 .9rem;
+      padding-bottom: .4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: .88rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-light);
+      margin: 1.8rem 0 .6rem;
+    }
+
+    p { margin-bottom: 1rem; color: var(--ink); }
+    p:last-child { margin-bottom: 0; }
+
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-2); }
+
+    /* ── PAGE HEADER ─────────────────────────────────────────────── */
+    .page-header {
+      margin-bottom: 2.4rem;
+      padding-bottom: 1.6rem;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .page-header .subtitle {
+      font-family: var(--font-mono);
+      font-size: .76rem;
+      color: var(--ink-faint);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+
+    /* ── HOME PAGE ───────────────────────────────────────────────── */
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 2.5rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+
+    .home-photo {
+      width: 180px;
+      height: 220px;
+      background: linear-gradient(160deg, #c9d8ef 0%, #dce9f8 60%, #e8ddd4 100%);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .badge-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      padding: .25rem .65rem;
+      border-radius: 2px;
+      letter-spacing: .04em;
+    }
+
+    .badge-blue  { background: #dce9f8; color: #1e3a65; }
+    .badge-terra { background: #f3e4db; color: #8b3520; }
+    .badge-sage  { background: #deeade; color: #2a5c2a; }
+
+    .contact-block {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+
+    .contact-block dl { display: grid; grid-template-columns: auto 1fr; gap: .3rem 1rem; }
+    .contact-block dt {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding-top: .05rem;
+    }
+    .contact-block dd { font-size: .9rem; }
+
+    .news-list { list-style: none; }
+    .news-list li {
+      display: flex;
+      gap: 1rem;
+      padding: .65rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: .92rem;
+    }
+    .news-list li:last-child { border-bottom: none; }
+    .news-date {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      padding-top: .15rem;
+      min-width: 5rem;
+    }
+
+    /* ── PUBLICATIONS ────────────────────────────────────────────── */
+    .pub-filters {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+
+    .filter-btn {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: none;
+      cursor: pointer;
+      color: var(--ink-light);
+      transition: all .15s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .pub-entry {
+      padding: 1.2rem 0 1.2rem 1.2rem;
+      border-left: 3px solid var(--rule);
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .pub-entry:hover { border-left-color: var(--accent); }
+
+    .pub-title {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: .25rem;
+    }
+
+    .pub-authors {
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      color: var(--ink-light);
+      margin-bottom: .2rem;
+    }
+
+    .pub-venue {
+      font-family: var(--font-sans);
+      font-size: .8rem;
+      color: var(--ink-faint);
+      font-style: italic;
+      margin-bottom: .5rem;
+    }
+
+    .pub-links { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .pub-link {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: .2rem .55rem;
+      border: 1px solid currentColor;
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--accent);
+      transition: all .15s;
+    }
+    .pub-link:hover { background: var(--accent); color: #fff; }
+    .pub-link.pdf  { color: var(--accent-2); }
+    .pub-link.pdf:hover { background: var(--accent-2); color: #fff; }
+
+    /* ── CONFERENCES ─────────────────────────────────────────────── */
+    .conf-timeline { position: relative; padding-left: 1.5rem; }
+    .conf-timeline::before {
+      content: '';
+      position: absolute; left: 0; top: .5rem; bottom: .5rem;
+      width: 2px; background: var(--rule);
+    }
+
+    .conf-item {
+      position: relative;
+      margin-bottom: 1.8rem;
+    }
+
+    .conf-item::before {
+      content: '';
+      position: absolute;
+      left: -1.6rem; top: .55rem;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--accent);
+    }
+
+    .conf-year {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      color: var(--ink-faint);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .conf-talk {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin: .2rem 0 .15rem;
+    }
+
+    .conf-meta {
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      color: var(--ink-light);
+    }
+
+    .conf-location {
+      font-family: var(--font-sans);
+      font-size: .78rem;
+      color: var(--ink-faint);
+    }
+
+    .invited-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: .63rem;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      background: #f3e4db;
+      color: #8b3520;
+      padding: .1rem .4rem;
+      border-radius: 2px;
+      margin-left: .4rem;
+    }
+
+    /* ── TEACHING ────────────────────────────────────────────────── */
+    .course-card {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1rem;
+      transition: box-shadow .2s;
+    }
+    .course-card:hover { box-shadow: var(--shadow); }
+
+    .course-header { display: flex; align-items: baseline; gap: .8rem; margin-bottom: .4rem; flex-wrap: wrap; }
+    .course-code {
+      font-family: var(--font-mono);
+      font-size: .76rem;
+      color: var(--accent);
+      letter-spacing: .04em;
+    }
+    .course-name {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .course-meta {
+      font-family: var(--font-sans);
+      font-size: .8rem;
+      color: var(--ink-light);
+      margin-bottom: .6rem;
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+    .course-meta span::before { content: '· '; color: var(--ink-faint); }
+    .course-meta span:first-child::before { content: ''; }
+
+    .course-desc { font-size: .92rem; color: var(--ink-light); }
+
+    .eval-bar-wrap { margin-top: .8rem; }
+    .eval-label {
+      display: flex; justify-content: space-between;
+      font-family: var(--font-mono); font-size: .68rem; color: var(--ink-faint);
+      margin-bottom: .25rem;
+    }
+    .eval-bar { height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+    .eval-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 1s ease; }
+
+    /* ── CV ──────────────────────────────────────────────────────── */
+    .cv-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      font-weight: 600;
+      padding: .6rem 1.2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      margin-bottom: 2rem;
+      letter-spacing: .02em;
+      transition: background .15s;
+    }
+    .cv-download-btn:hover { background: #1c3560; color: #fff; }
+
+    .cv-section { margin-bottom: 1.8rem; }
+
+    .cv-entry {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: .5rem 1.2rem;
+      padding: .8rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: .93rem;
+    }
+    .cv-entry:last-child { border-bottom: none; }
+
+    .cv-year {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--ink-faint);
+      padding-top: .18rem;
+      letter-spacing: .04em;
+    }
+
+    .cv-title { font-weight: 500; color: var(--ink); line-height: 1.4; }
+    .cv-org { font-family: var(--font-sans); font-size: .82rem; color: var(--ink-light); }
+
+    .cv-award {
+      display: flex; align-items: baseline; gap: .8rem;
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: .92rem;
+    }
+    .cv-award-year {
+      font-family: var(--font-mono); font-size: .7rem; color: var(--ink-faint);
+      min-width: 3.5rem;
+    }
+
+    .skills-grid { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .4rem; }
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      padding: .25rem .7rem;
+      background: #eef2f8;
+      color: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ── NOTES ───────────────────────────────────────────────────── */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .note-card {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.3rem;
+      cursor: pointer;
+      transition: box-shadow .2s, border-color .2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .note-card:hover { box-shadow: var(--shadow); border-color: #c0bbb4; }
+
+    .note-tag {
+      font-family: var(--font-mono);
+      font-size: .65rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--ink-faint);
+      margin-bottom: .5rem;
+    }
+
+    .note-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.35;
+      margin-bottom: .5rem;
+    }
+
+    .note-preview {
+      font-family: var(--font-sans);
+      font-size: .78rem;
+      color: var(--ink-light);
+      line-height: 1.5;
+    }
+
+    .note-footer {
+      margin-top: .8rem;
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      color: var(--ink-faint);
+    }
+
+    /* Single note view */
+    .note-back {
+      font-family: var(--font-sans);
+      font-size: .8rem;
+      color: var(--ink-faint);
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      margin-bottom: 1.5rem;
+      transition: color .15s;
+    }
+    .note-back:hover { color: var(--accent); }
+
+    #note-detail { display: none; }
+    #note-detail.visible { display: block; animation: fadeUp .3s ease both; }
+    #notes-list-view.hidden { display: none; }
+
+    .note-content-body {
+      font-family: var(--font-serif);
+      font-size: 1.02rem;
+      line-height: 1.8;
+    }
+
+    .note-content-body h4 {
+      font-family: var(--font-sans);
+      font-size: .82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--ink-light);
+      margin: 1.8rem 0 .6rem;
+    }
+
+    .note-content-body code {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: #eef2f8;
+      color: var(--accent);
+      padding: .1rem .4rem;
+      border-radius: 2px;
+    }
+
+    .note-content-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      color: var(--ink-light);
+      font-style: italic;
+      margin: 1rem 0;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #menu-toggle { display: block; }
+      #sidebar {
+        transform: translateX(-100%);
+        box-shadow: 4px 0 20px rgba(0,0,0,.12);
+      }
+      #sidebar.open { transform: translateX(0); }
+      #main { margin-left: 0; padding: 3.5rem 1.4rem 4rem; }
+      .home-grid { grid-template-columns: 1fr; }
+      .home-photo { display: none; }
+      .cv-entry { grid-template-columns: 1fr; gap: .1rem; }
+    }
+
+    /* ── UTILITY ─────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+    .muted { color: var(--ink-faint); }
+    .em { color: var(--accent); font-style: normal; }
+
+    ::selection { background: #c9d8ef; color: var(--ink); }
+  </style>
+</head>
+<body>
+
+<!-- Mobile menu toggle -->
+<button id="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+<!-- ── SIDEBAR ─────────────────────────────────────────────────── -->
+<aside id="sidebar">
+  <div class="profile-wrap">
+    <div class="avatar">👤</div>
+    <div class="profile-name">Dr. Alex Rivera</div>
+    <div class="profile-role">Assistant Professor</div>
+    <div class="profile-org">Dept. of Computer Science</div>
+  </div>
+
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="#" class="nav-link active" data-page="home">
+        <span class="nav-icon">⌂</span> Home
+      </a></li>
+    </ul>
+
+    <div class="nav-section-label">Research</div>
+    <ul>
+      <li><a href="#" class="nav-link" data-page="publications">
+        <span class="nav-icon">◈</span> Publications
+      </a></li>
+      <li><a href="#" class="nav-link" data-page="conferences">
+        <span class="nav-icon">◎</span> Conferences
+      </a></li>
+    </ul>
+
+    <div class="nav-section-label">Academic</div>
+    <ul>
+      <li><a href="#" class="nav-link" data-page="teaching">
+        <span class="nav-icon">◻</span> Teaching
+      </a></li>
+      <li><a href="#" class="nav-link" data-page="cv">
+        <span class="nav-icon">◇</span> CV
+      </a></li>
+      <li><a href="#" class="nav-link" data-page="notes">
+        <span class="nav-icon">◈</span> Notes
+      </a></li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-links">
+    <a href="#">Google Scholar</a>
+    <a href="#">GitHub</a>
+    <a href="#">Twitter</a>
+    <a href="#">Email</a>
+  </div>
+</aside>
+
+<!-- ── MAIN ────────────────────────────────────────────────────── -->
+<main id="main">
+
+  <!-- ── HOME ─────────────────────────────────────────────────── -->
+  <section class="page active" id="page-home">
+    <div class="home-grid">
+      <div>
+        <div class="page-header">
+          <div class="subtitle">Academic Homepage</div>
+          <h1>Alex Rivera</h1>
+          <p style="font-size:1.05rem; color:var(--ink-light); margin-top:.3rem;">
+            Assistant Professor, Department of Computer Science<br>
+            <span style="font-family:var(--font-sans); font-size:.88rem;">University of Somewhere · Somewhere City, CA</span>
+          </p>
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-blue">Machine Learning</span>
+          <span class="badge badge-blue">Natural Language Processing</span>
+          <span class="badge badge-terra">AI Safety</span>
+          <span class="badge badge-sage">Computational Linguistics</span>
+        </div>
+      </div>
+      <div class="home-photo">🎓</div>
+    </div>
+
+    <p>I am an Assistant Professor in the <a href="#">Department of Computer Science</a> at the <a href="#">University of Somewhere</a>. My research focuses on the intersection of <strong>natural language processing</strong>, <strong>machine learning</strong>, and <strong>AI safety</strong>. I am particularly interested in developing methods that make large language models more interpretable and aligned with human values.</p>
+
+    <p>Before joining the University of Somewhere, I completed my Ph.D. at MIT under the supervision of <a href="#">Prof. Jordan Chen</a>, and held postdoctoral positions at Stanford and Google Research.</p>
+
+    <div class="contact-block">
+      <dl>
+        <dt>Office</dt>
+        <dd>Gates Hall 314, University of Somewhere</dd>
+        <dt>Email</dt>
+        <dd><a href="mailto:arivera@somewhere.edu">arivera@somewhere.edu</a></dd>
+        <dt>Office Hours</dt>
+        <dd>Tuesdays 2–4 PM, or by appointment</dd>
+        <dt>Lab</dt>
+        <dd><a href="#">Language & Reasoning Lab (LRL)</a></dd>
+      </dl>
+    </div>
+
+    <h2>Recent News</h2>
+    <ul class="news-list">
+      <li>
+        <span class="news-date">Jun 2026</span>
+        <span>Paper accepted at <strong>ACL 2026</strong>: "Causal Probing for Factual Associations in Transformers." See <a href="#">preprint</a>.</span>
+      </li>
+      <li>
+        <span class="news-date">Apr 2026</span>
+        <span>Received <strong>NSF CAREER Award</strong> for research on interpretable NLP models. <a href="#">Press release.</a></span>
+      </li>
+      <li>
+        <span class="news-date">Mar 2026</span>
+        <span>Invited talk at the <strong>Simons Institute</strong> workshop on "Foundations of Large Language Models."</span>
+      </li>
+      <li>
+        <span class="news-date">Jan 2026</span>
+        <span>Two papers accepted at <strong>ICLR 2026</strong>. Camera-ready versions available on the <a href="#">publications page</a>.</span>
+      </li>
+      <li>
+        <span class="news-date">Nov 2025</span>
+        <span>Ph.D. student <a href="#">Maya Okafor</a> receives <strong>NSF Graduate Fellowship</strong>. Congratulations, Maya!</span>
+      </li>
+    </ul>
+
+    <h2>Research Interests</h2>
+    <p>My work spans several interconnected themes:</p>
+    <ul style="padding-left:1.4rem; margin-bottom:1rem;">
+      <li style="margin-bottom:.5rem;"><strong>Mechanistic Interpretability</strong> — Understanding how transformers implement algorithms and store world knowledge through careful circuit analysis.</li>
+      <li style="margin-bottom:.5rem;"><strong>Alignment & Safety</strong> — Developing methods to ensure language models behave consistently with human intent, even in distribution-shifted settings.</li>
+      <li style="margin-bottom:.5rem;"><strong>Low-resource NLP</strong> — Building robust multilingual models for under-resourced languages using cross-lingual transfer.</li>
+      <li><strong>Evaluation Methodology</strong> — Designing rigorous benchmarks that measure what we actually care about.</li>
+    </ul>
+  </section>
+
+  <!-- ── PUBLICATIONS ──────────────────────────────────────────── -->
+  <section class="page" id="page-publications">
+    <div class="page-header">
+      <div class="subtitle">Research Output</div>
+      <h1>Publications</h1>
+    </div>
+
+    <div class="pub-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="journal">Journals</button>
+      <button class="filter-btn" data-filter="conference">Conferences</button>
+      <button class="filter-btn" data-filter="workshop">Workshops</button>
+      <button class="filter-btn" data-filter="preprint">Preprints</button>
+    </div>
+
+    <h2>2026</h2>
+
+    <div class="pub-entry" data-type="conference">
+      <div class="pub-title">Causal Probing for Factual Associations in Transformers</div>
+      <div class="pub-authors"><span class="em">Alex Rivera</span>, Maya Okafor, Jordan Chen</div>
+      <div class="pub-venue">Annual Meeting of the Association for Computational Linguistics (ACL), 2026</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">arXiv</a>
+        <a href="#" class="pub-link">Code</a>
+        <a href="#" class="pub-link">Slides</a>
+      </div>
+    </div>
+
+    <div class="pub-entry" data-type="conference">
+      <div class="pub-title">Towards Scalable Oversight via Debate with Weak Supervisors</div>
+      <div class="pub-authors"><span class="em">Alex Rivera</span>, Priya Nair, Sam Alterman</div>
+      <div class="pub-venue">International Conference on Learning Representations (ICLR), 2026</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">arXiv</a>
+        <a href="#" class="pub-link">Poster</a>
+      </div>
+    </div>
+
+    <div class="pub-entry" data-type="conference">
+      <div class="pub-title">Cross-Lingual Knowledge Distillation for Low-Resource Languages</div>
+      <div class="pub-authors">Fatima El-Amin, <span class="em">Alex Rivera</span></div>
+      <div class="pub-venue">International Conference on Learning Representations (ICLR), 2026</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">arXiv</a>
+        <a href="#" class="pub-link">Dataset</a>
+      </div>
+    </div>
+
+    <h2>2025</h2>
+
+    <div class="pub-entry" data-type="journal">
+      <div class="pub-title">Circuit Analysis of Induction Heads: A Mechanistic Study</div>
+      <div class="pub-authors"><span class="em">Alex Rivera</span>, Jordan Chen, Wei Zhang</div>
+      <div class="pub-venue"><em>Journal of Machine Learning Research</em> (JMLR), 26(1):1–54, 2025</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">Journal</a>
+        <a href="#" class="pub-link">Code</a>
+        <a href="#" class="pub-link">Talk</a>
+      </div>
+    </div>
+
+    <div class="pub-entry" data-type="conference">
+      <div class="pub-title">Evaluating Temporal Generalization in Language Models</div>
+      <div class="pub-authors">Maya Okafor, <span class="em">Alex Rivera</span>, Lin Wu</div>
+      <div class="pub-venue">Conference on Empirical Methods in Natural Language Processing (EMNLP), 2025</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">arXiv</a>
+        <a href="#" class="pub-link">Benchmark</a>
+      </div>
+    </div>
+
+    <div class="pub-entry" data-type="workshop">
+      <div class="pub-title">Do LLMs Understand Negation? A Systematic Evaluation</div>
+      <div class="pub-authors">Lin Wu, <span class="em">Alex Rivera</span></div>
+      <div class="pub-venue">Workshop on Insights from Negative Results in NLP @ EMNLP, 2025</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">Poster</a>
+      </div>
+    </div>
+
+    <h2>2024</h2>
+
+    <div class="pub-entry" data-type="preprint">
+      <div class="pub-title">A Survey on Mechanistic Interpretability of Transformer Language Models</div>
+      <div class="pub-authors"><span class="em">Alex Rivera</span></div>
+      <div class="pub-venue">arXiv preprint, 2024</div>
+      <div class="pub-links">
+        <a href="#" class="pub-link pdf">PDF</a>
+        <a href="#" class="pub-link">arXiv</a>
+        <a href="#" class="pub-link">Talk (video)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONFERENCES ───────────────────────────────────────────── -->
+  <section class="page" id="page-conferences">
+    <div class="page-header">
+      <div class="subtitle">Talks & Presentations</div>
+      <h1>Conferences</h1>
+    </div>
+    <p style="margin-bottom:2rem; color:var(--ink-light); font-family:var(--font-sans); font-size:.9rem;">
+      Invited talks, contributed talks, and poster presentations at academic venues.
+    </p>
+
+    <div class="conf-timeline">
+
+      <div class="conf-item">
+        <div class="conf-year">Jun 2026</div>
+        <div class="conf-talk">Causal Probing for Factual Associations in Transformers <span class="invited-tag">Oral</span></div>
+        <div class="conf-meta">ACL 2026 · Annual Meeting of the ACL</div>
+        <div class="conf-location">Vienna, Austria · <a href="#">Slides</a> · <a href="#">Video</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">May 2026</div>
+        <div class="conf-talk">Foundations of Large Language Models <span class="invited-tag">Invited</span></div>
+        <div class="conf-meta">Simons Institute for the Theory of Computing · Workshop on LLMs</div>
+        <div class="conf-location">Berkeley, CA, USA · <a href="#">Slides</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">May 2026</div>
+        <div class="conf-talk">Towards Scalable Oversight via Debate with Weak Supervisors</div>
+        <div class="conf-meta">ICLR 2026 · International Conference on Learning Representations</div>
+        <div class="conf-location">Singapore · <a href="#">Poster</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">Nov 2025</div>
+        <div class="conf-talk">Evaluating Temporal Generalization in Language Models <span class="invited-tag">Oral</span></div>
+        <div class="conf-meta">EMNLP 2025 · Empirical Methods in Natural Language Processing</div>
+        <div class="conf-location">Miami, FL, USA · <a href="#">Slides</a> · <a href="#">Video</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">Sep 2025</div>
+        <div class="conf-talk">Mechanistic Interpretability: From Theory to Practice <span class="invited-tag">Invited</span></div>
+        <div class="conf-meta">EPFL Machine Learning Seminar</div>
+        <div class="conf-location">Lausanne, Switzerland · <a href="#">Slides</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">Jul 2025</div>
+        <div class="conf-talk">Circuit Analysis of Induction Heads <span class="invited-tag">Oral</span></div>
+        <div class="conf-meta">ICML 2025 · International Conference on Machine Learning</div>
+        <div class="conf-location">Honolulu, HI, USA · <a href="#">Slides</a> · <a href="#">Video</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">Jan 2025</div>
+        <div class="conf-talk">What Do Language Models Know About Time? <span class="invited-tag">Invited</span></div>
+        <div class="conf-meta">Johns Hopkins CLSP Seminar</div>
+        <div class="conf-location">Baltimore, MD, USA · <a href="#">Slides</a></div>
+      </div>
+
+      <div class="conf-item">
+        <div class="conf-year">Dec 2024</div>
+        <div class="conf-talk">Alignment via Debate: Lessons from Theory <span class="invited-tag">Invited</span></div>
+        <div class="conf-meta">NeurIPS 2024 · Workshop on Alignment and Safety</div>
+        <div class="conf-location">Vancouver, Canada · <a href="#">Slides</a></div>
+      </div>
+
+    </div>
+
+    <h2>Service &amp; Program Committees</h2>
+    <p style="font-family:var(--font-sans); font-size:.88rem; color:var(--ink-light);">
+      Area Chair / Senior Program Committee: ACL 2025–2026, EMNLP 2024–2025, NAACL 2025.<br>
+      Reviewer: NeurIPS, ICML, ICLR, ACL, EMNLP, NAACL, EACL, COLING (2021–present).<br>
+      Associate Editor: <em>Transactions of the ACL</em> (2025–present).
+    </p>
+  </section>
+
+  <!-- ── TEACHING ──────────────────────────────────────────────── -->
+  <section class="page" id="page-teaching">
+    <div class="page-header">
+      <div class="subtitle">Courses &amp; Mentorship</div>
+      <h1>Teaching</h1>
+    </div>
+    <p style="margin-bottom:2rem; color:var(--ink-light); font-family:var(--font-sans); font-size:.9rem;">
+      Undergraduate and graduate courses at the University of Somewhere. Student evaluations shown where available.
+    </p>
+
+    <h2>Current Courses (Spring 2026)</h2>
+
+    <div class="course-card">
+      <div class="course-header">
+        <span class="course-code">CS 489</span>
+        <span class="course-name">Large Language Models: Foundations &amp; Applications</span>
+      </div>
+      <div class="course-meta">
+        <span>Graduate</span>
+        <span>Spring 2026</span>
+        <span>42 students</span>
+        <span>MWF 10–11 AM · Gates 101</span>
+      </div>
+      <div class="course-desc">
+        A graduate seminar covering the theoretical foundations and practical applications of large language models, including pre-training, instruction tuning, RLHF, interpretability, and safety. Paper reading + project-based.
+      </div>
+      <div class="eval-bar-wrap">
+        <div class="eval-label"><span>Overall rating</span><span>4.8 / 5.0</span></div>
+        <div class="eval-bar"><div class="eval-fill" data-width="96%"></div></div>
+      </div>
+    </div>
+
+    <h2>Past Courses</h2>
+
+    <div class="course-card">
+      <div class="course-header">
+        <span class="course-code">CS 340</span>
+        <span class="course-name">Natural Language Processing</span>
+      </div>
+      <div class="course-meta">
+        <span>Undergraduate</span>
+        <span>Fall 2023, 2024, 2025</span>
+        <span>~80 students/year</span>
+      </div>
+      <div class="course-desc">
+        Core NLP course covering language modeling, parsing, semantics, machine translation, and modern transformer architectures. Includes 3 programming assignments and a final project.
+      </div>
+      <div class="eval-bar-wrap">
+        <div class="eval-label"><span>Overall rating (avg)</span><span>4.6 / 5.0</span></div>
+        <div class="eval-bar"><div class="eval-fill" data-width="92%"></div></div>
+      </div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-header">
+        <span class="course-code">CS 210</span>
+        <span class="course-name">Introduction to Machine Learning</span>
+      </div>
+      <div class="course-meta">
+        <span>Undergraduate</span>
+        <span>Spring 2023, 2024</span>
+        <span>~130 students</span>
+      </div>
+      <div class="course-desc">
+        Introductory ML course covering supervised and unsupervised learning, neural networks, model evaluation, and ethical considerations in AI deployment.
+      </div>
+      <div class="eval-bar-wrap">
+        <div class="eval-label"><span>Overall rating (avg)</span><span>4.4 / 5.0</span></div>
+        <div class="eval-bar"><div class="eval-fill" data-width="88%"></div></div>
+      </div>
+    </div>
+
+    <div class="course-card">
+      <div class="course-header">
+        <span class="course-code">CS 590</span>
+        <span class="course-name">Research Seminar: AI Safety</span>
+      </div>
+      <div class="course-meta">
+        <span>Graduate</span>
+        <span>Spring 2025</span>
+        <span>15 students</span>
+      </div>
+      <div class="course-desc">
+        Reading seminar on AI alignment and safety. Topics include reward hacking, deceptive alignment, oversight, interpretability, and policy. Weekly paper presentations and discussions.
+      </div>
+    </div>
+
+    <h2>Students &amp; Advising</h2>
+    <h3>Ph.D. Students</h3>
+    <div class="course-card" style="padding: .9rem 1.2rem;">
+      <strong>Maya Okafor</strong> <span class="muted" style="font-family:var(--font-sans); font-size:.82rem;">(2022–present)</span> · Temporal reasoning and knowledge in LLMs · NSF GRFP Fellow<br>
+      <strong>Lin Wu</strong> <span class="muted" style="font-family:var(--font-sans); font-size:.82rem;">(2023–present)</span> · Negation and semantic compositionality<br>
+      <strong>Priya Nair</strong> <span class="muted" style="font-family:var(--font-sans); font-size:.82rem;">(2024–present)</span> · Scalable oversight and debate
+    </div>
+    <h3>M.S. Students</h3>
+    <div class="course-card" style="padding: .9rem 1.2rem;">
+      <strong>Carlos Mejía</strong> <span class="muted" style="font-family:var(--font-sans); font-size:.82rem;">(2025–present)</span> · Multilingual model evaluation<br>
+      <strong>Aiko Tanaka</strong> <span class="muted" style="font-family:var(--font-sans); font-size:.82rem;">(2025–present)</span> · Efficient inference for LLMs
+    </div>
+  </section>
+
+  <!-- ── CV ────────────────────────────────────────────────────── -->
+  <section class="page" id="page-cv">
+    <div class="page-header">
+      <div class="subtitle">Curriculum Vitae</div>
+      <h1>CV</h1>
+    </div>
+
+    <a href="#" class="cv-download-btn">↓ Download Full CV (PDF)</a>
+
+    <h2>Education</h2>
+    <div class="cv-section">
+      <div class="cv-entry">
+        <span class="cv-year">2018 – 2023</span>
+        <div>
+          <div class="cv-title">Ph.D. in Computer Science</div>
+          <div class="cv-org">Massachusetts Institute of Technology, Cambridge, MA</div>
+          <div style="font-family:var(--font-sans); font-size:.8rem; color:var(--ink-faint);">Advisor: Prof. Jordan Chen · Thesis: "Circuits, Knowledge, and Control in Language Models"</div>
+        </div>
+      </div>
+      <div class="cv-entry">
+        <span class="cv-year">2014 – 2018</span>
+        <div>
+          <div class="cv-title">B.S. in Computer Science &amp; Mathematics, <em>summa cum laude</em></div>
+          <div class="cv-org">University of California, Berkeley</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Academic Positions</h2>
+    <div class="cv-section">
+      <div class="cv-entry">
+        <span class="cv-year">2024 – present</span>
+        <div>
+          <div class="cv-title">Assistant Professor</div>
+          <div class="cv-org">Department of Computer Science, University of Somewhere</div>
+        </div>
+      </div>
+      <div class="cv-entry">
+        <span class="cv-year">2023 – 2024</span>
+        <div>
+          <div class="cv-title">Postdoctoral Researcher</div>
+          <div class="cv-org">Google Brain / Google DeepMind, Mountain View, CA</div>
+        </div>
+      </div>
+      <div class="cv-entry">
+        <span class="cv-year">2022 – 2023</span>
+        <div>
+          <div class="cv-title">Visiting Ph.D. Researcher</div>
+          <div class="cv-org">Stanford NLP Group, Stanford University</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Grants &amp; Awards</h2>
+    <div class="cv-section">
+      <div class="cv-award"><span class="cv-award-year">2026</span><span><strong>NSF CAREER Award</strong> — National Science Foundation ($520,000)</span></div>
+      <div class="cv-award"><span class="cv-award-year">2025</span><span><strong>Outstanding Paper Award</strong> — ICML 2025</span></div>
+      <div class="cv-award"><span class="cv-award-year">2024</span><span><strong>Google Research Award</strong> — Research in LLM Interpretability</span></div>
+      <div class="cv-award"><span class="cv-award-year">2022</span><span><strong>Best Paper Honorable Mention</strong> — ACL 2022</span></div>
+      <div class="cv-award"><span class="cv-award-year">2021</span><span><strong>IBM Ph.D. Fellowship</strong> — 2021–2022</span></div>
+      <div class="cv-award"><span class="cv-award-year">2018</span><span><strong>NSF Graduate Research Fellowship</strong> — 2018–2021</span></div>
+    </div>
+
+    <h2>Professional Service</h2>
+    <div class="cv-section" style="font-family:var(--font-sans); font-size:.88rem; color:var(--ink-light); line-height:1.9;">
+      <strong style="color:var(--ink);">Area Chair / Senior PC:</strong> ACL 2025–26, EMNLP 2024–25, NAACL 2025<br>
+      <strong style="color:var(--ink);">Reviewer:</strong> NeurIPS, ICML, ICLR, ACL, EMNLP, NAACL, EACL (2021–present)<br>
+      <strong style="color:var(--ink);">Associate Editor:</strong> <em>Transactions of the ACL</em> (2025–present)<br>
+      <strong style="color:var(--ink);">Workshop Organizer:</strong> BlackboxNLP @ EMNLP 2024, Safety in NLP @ ACL 2025
+    </div>
+
+    <h2>Skills &amp; Tools</h2>
+    <div class="skills-grid">
+      <span class="skill-chip">Python</span>
+      <span class="skill-chip">PyTorch</span>
+      <span class="skill-chip">JAX</span>
+      <span class="skill-chip">HuggingFace</span>
+      <span class="skill-chip">TransformerLens</span>
+      <span class="skill-chip">CUDA</span>
+      <span class="skill-chip">Linux</span>
+      <span class="skill-chip">LaTeX</span>
+      <span class="skill-chip">Git</span>
+      <span class="skill-chip">Slurm/SBATCH</span>
+    </div>
+  </section>
+
+  <!-- ── NOTES ─────────────────────────────────────────────────── -->
+  <section class="page" id="page-notes">
+    <div id="notes-list-view">
+      <div class="page-header">
+        <div class="subtitle">Writing &amp; Resources</div>
+        <h1>Notes</h1>
+      </div>
+      <p style="margin-bottom:1.8rem; color:var(--ink-light); font-family:var(--font-sans); font-size:.9rem;">
+        Lecture notes, expository writing, and research commentary. Click any card to read.
+      </p>
+
+      <h3>Lecture Notes</h3>
+      <div class="notes-grid">
+        <a href="#" class="note-card" onclick="openNote('attention', event)">
+          <div class="note-tag">NLP · Lecture Note</div>
+          <div class="note-title">Self-Attention Mechanisms: A Formal Treatment</div>
+          <div class="note-preview">A derivation of scaled dot-product attention from first principles, with proofs of key properties.</div>
+          <div class="note-footer">Updated Mar 2026 · 18 pp.</div>
+        </a>
+        <a href="#" class="note-card" onclick="openNote('probing', event)">
+          <div class="note-tag">Interpretability · Tutorial</div>
+          <div class="note-title">Probing Classifiers: What They Can and Cannot Tell Us</div>
+          <div class="note-preview">A critical survey of probing methodology, including common pitfalls and better alternatives.</div>
+          <div class="note-footer">Updated Jan 2026 · 12 pp.</div>
+        </a>
+        <a href="#" class="note-card" onclick="openNote('rlhf', event)">
+          <div class="note-tag">Alignment · Overview</div>
+          <div class="note-title">RLHF: Reward Modeling, PPO, and What Can Go Wrong</div>
+          <div class="note-preview">An end-to-end walkthrough of reinforcement learning from human feedback, aimed at ML practitioners.</div>
+          <div class="note-footer">Updated Dec 2025 · 24 pp.</div>
+        </a>
+        <a href="#" class="note-card" onclick="openNote('circuits', event)">
+          <div class="note-tag">Interpretability · Research Note</div>
+          <div class="note-title">Identifying Circuits in Transformers: A Practitioner's Guide</div>
+          <div class="note-preview">How to use activation patching and attention knockout to identify functional circuits. Includes worked examples.</div>
+          <div class="note-footer">Updated Oct 2025 · 30 pp.</div>
+        </a>
+        <a href="#" class="note-card" onclick="openNote('eval', event)">
+          <div class="note-tag">Methodology · Commentary</div>
+          <div class="note-title">On the Limitations of Benchmark-Driven Evaluation</div>
+          <div class="note-preview">Why leaderboard performance is a poor proxy for real capability, and what to do instead.</div>
+          <div class="note-footer">Updated Sep 2025 · 8 pp.</div>
+        </a>
+        <a href="#" class="note-card" onclick="openNote('tokens', event)">
+          <div class="note-tag">NLP · Explainer</div>
+          <div class="note-title">Tokenization and Its Discontents</div>
+          <div class="note-preview">Why tokenization is a surprisingly consequential design choice—and what we lose by ignoring it.</div>
+          <div class="note-footer">Updated Aug 2025 · 10 pp.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Single note view -->
+    <div id="note-detail">
+      <button class="note-back" onclick="closeNote()">← Back to Notes</button>
+      <div id="note-content"></div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ── NOTE DATA ────────────────────────────────────────────────────
+  const notes = {
+    attention: {
+      tag: 'NLP · Lecture Note',
+      title: 'Self-Attention Mechanisms: A Formal Treatment',
+      date: 'Updated March 2026 · 18 pp.',
+      body: `
+        <p>These notes provide a rigorous derivation of the self-attention mechanism used in transformer architectures, starting from the query-key-value framework and building up to multi-head attention and positional encodings.</p>
+        <h4>1. Motivation</h4>
+        <p>Standard recurrent architectures process sequences sequentially, making parallelization difficult and creating a bottleneck for long-range dependencies. Self-attention addresses both problems by allowing every position to directly attend to every other position in the sequence.</p>
+        <h4>2. Scaled Dot-Product Attention</h4>
+        <p>Given queries <code>Q ∈ ℝ^{n×d_k}</code>, keys <code>K ∈ ℝ^{n×d_k}</code>, and values <code>V ∈ ℝ^{n×d_v}</code>, scaled dot-product attention is defined as:</p>
+        <blockquote>Attention(Q, K, V) = softmax(QKᵀ / √d_k) · V</blockquote>
+        <p>The scaling factor <code>1/√d_k</code> prevents the dot products from growing too large in magnitude, which would push the softmax into regions with very small gradients.</p>
+        <h4>3. Multi-Head Attention</h4>
+        <p>Instead of computing a single attention function, multi-head attention linearly projects Q, K, V into h different subspaces, computes attention in each subspace, and concatenates the results. This allows the model to jointly attend to information from different representation subspaces at different positions.</p>
+        <h4>4. Positional Encodings</h4>
+        <p>Because self-attention is permutation-equivariant, positional information must be injected explicitly. The original transformer uses sinusoidal encodings; modern models typically use rotary position embeddings (RoPE) or ALiBi.</p>
+      `
+    },
+    probing: {
+      tag: 'Interpretability · Tutorial',
+      title: 'Probing Classifiers: What They Can and Cannot Tell Us',
+      date: 'Updated January 2026 · 12 pp.',
+      body: `
+        <p>Probing classifiers—linear (or shallow) models trained on top of frozen representations—have become the standard tool for understanding what information is encoded in neural network activations. This note reviews the methodology and its limitations.</p>
+        <h4>The Basic Setup</h4>
+        <p>Given a model <code>f</code> and a linguistic property <code>y</code> (e.g., POS tag, syntactic role), we train a classifier <code>g</code> on the representation <code>h = f(x)</code> to predict <code>y</code>. High accuracy of <code>g</code> is taken as evidence that <code>h</code> encodes <code>y</code>.</p>
+        <h4>Confounds and Failure Modes</h4>
+        <p>The main critique of probing is that a high-accuracy probe does not imply the information is used by the model. A representation might encode POS tags simply as a byproduct of predicting the next token, without the POS information ever being retrieved during inference.</p>
+        <blockquote>Probing tells us about what can be decoded from representations, not about what is actually used for computation. This distinction matters enormously for interpretability claims.</blockquote>
+        <h4>Better Alternatives</h4>
+        <p>Causal interventions—activation patching, causal tracing, and path patching—provide stronger evidence by directly manipulating activations and measuring the effect on model outputs. These methods are now preferred in the mechanistic interpretability literature.</p>
+      `
+    },
+    rlhf: {
+      tag: 'Alignment · Overview',
+      title: 'RLHF: Reward Modeling, PPO, and What Can Go Wrong',
+      date: 'Updated December 2025 · 24 pp.',
+      body: `
+        <p>Reinforcement Learning from Human Feedback (RLHF) has become the dominant paradigm for aligning large language models with human preferences. This note provides an end-to-end walkthrough of the pipeline.</p>
+        <h4>Phase 1: Supervised Fine-Tuning (SFT)</h4>
+        <p>The base language model is fine-tuned on a dataset of high-quality demonstrations, producing an initial policy <code>π_SFT</code>. This step is important: it shifts the model into the regime where human raters can meaningfully evaluate outputs.</p>
+        <h4>Phase 2: Reward Modeling</h4>
+        <p>Human raters compare pairs of model outputs and express preferences. A reward model <code>r_θ</code> is trained to predict these preferences. The reward model is essentially a Bradley-Terry model on top of a language model backbone.</p>
+        <h4>Phase 3: RL Optimization</h4>
+        <p>The policy is optimized against the reward model using PPO (Proximal Policy Optimization), with a KL penalty against the SFT policy to prevent reward hacking.</p>
+        <h4>What Can Go Wrong</h4>
+        <p>Reward hacking is the central failure mode: the policy finds ways to achieve high reward model scores that do not correspond to genuinely good outputs. This includes producing verbose, flattering responses, over-hedging, and exploiting distributional gaps in the reward model's training data.</p>
+        <blockquote>The reward model is a proxy for human preferences, not a ground truth. Optimizing hard against a proxy will inevitably find its weaknesses.</blockquote>
+      `
+    },
+    circuits: {
+      tag: 'Interpretability · Research Note',
+      title: 'Identifying Circuits in Transformers: A Practitioner\'s Guide',
+      date: 'Updated October 2025 · 30 pp.',
+      body: `
+        <p>Circuit analysis aims to identify the subgraphs of a neural network responsible for specific behaviors. This guide walks through the main techniques, with worked examples on GPT-2 and LLaMA-style architectures.</p>
+        <h4>Activation Patching</h4>
+        <p>Activation patching (also called causal tracing) runs the model on a "corrupted" input and restores specific activations from the clean run, measuring the effect on output probability. Positions where restoration significantly recovers performance are causally implicated in the computation.</p>
+        <h4>Attention Knockout</h4>
+        <p>Attention knockout zeros out specific attention edges (attention from token <code>i</code> to token <code>j</code> in head <code>h</code>) and measures the effect on output. This is useful for identifying which attention patterns are load-bearing for a behavior.</p>
+        <h4>Path Patching</h4>
+        <p>Path patching generalizes activation patching to trace specific paths through the computational graph, allowing finer-grained attribution than node-level patching alone.</p>
+        <h4>A Worked Example: The IOI Circuit</h4>
+        <p>The Indirect Object Identification (IOI) task—"When Mary and John went to the store, John gave a drink to ___"—has been studied in detail. The circuit involves Name Mover Heads, S-Inhibition Heads, and Backup Name Mover Heads, which together implement a token-copying mechanism conditioned on the syntactic role of the names.</p>
+      `
+    },
+    eval: {
+      tag: 'Methodology · Commentary',
+      title: 'On the Limitations of Benchmark-Driven Evaluation',
+      date: 'Updated September 2025 · 8 pp.',
+      body: `
+        <p>The NLP community has developed an impressive arsenal of benchmarks—MMLU, BIG-Bench, HELM, and dozens more. Yet there is growing evidence that performance on these benchmarks is a poor proxy for the capabilities we actually care about. This note explains why.</p>
+        <h4>Goodhart's Law in Evaluation</h4>
+        <p>When a measure becomes a target, it ceases to be a good measure. Models are now trained with evaluation benchmarks in mind—either explicitly through data contamination or implicitly through design choices informed by benchmark results. This creates a feedback loop that inflates apparent progress.</p>
+        <blockquote>We should be suspicious of any model that dramatically outperforms human performance on a benchmark, while still failing obviously on related real-world tasks.</blockquote>
+        <h4>The Contamination Problem</h4>
+        <p>Modern LLMs are trained on internet-scale data that very likely contains benchmark test sets. Even without intentional contamination, models may have seen the test questions during pre-training. This makes it difficult to interpret benchmark scores as evidence of generalization.</p>
+        <h4>What To Do Instead</h4>
+        <p>Held-out evaluation on genuinely new tasks, human evaluation with careful rubrics, and adversarial testing are all more robust than fixed-benchmark performance. The field should invest more in evaluation methodology as a first-class research problem.</p>
+      `
+    },
+    tokens: {
+      tag: 'NLP · Explainer',
+      title: 'Tokenization and Its Discontents',
+      date: 'Updated August 2025 · 10 pp.',
+      body: `
+        <p>Tokenization—the process of splitting text into discrete units for processing—is typically treated as a solved engineering problem. This note argues it is anything but.</p>
+        <h4>What BPE Does (and Doesn't Do)</h4>
+        <p>Byte-pair encoding (BPE) and similar algorithms produce compact vocabularies that balance coverage and frequency. But the resulting tokens are not linguistically meaningful units: the same word may be split differently depending on its position, capitalization, and surrounding context.</p>
+        <h4>Downstream Consequences</h4>
+        <p>Tokenization artifacts affect model behavior in subtle ways. Arithmetic tasks are harder when numbers are split across tokens. Rare languages get inefficient tokenizations that consume more of the context window per word. Some words are systematically split in ways that obscure their morphological structure.</p>
+        <blockquote>A model that needs 3× as many tokens to represent Swahili as English is not, in any meaningful sense, equally capable in both languages.</blockquote>
+        <h4>Alternatives and the Road Ahead</h4>
+        <p>Byte-level models, character-level models, and hierarchical approaches all offer potential improvements. Recent work on MegaByte and other sub-word architectures suggests tokenization-free modeling may be practical at scale. This remains an active and underexplored research area.</p>
+      `
+    }
+  };
+
+  // ── ROUTING ──────────────────────────────────────────────────────
+  function navigate(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-link').forEach(a => a.classList.remove('active'));
+
+    const page = document.getElementById('page-' + pageId);
+    if (page) page.classList.add('active');
+
+    const link = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+    if (link) link.classList.add('active');
+
+    // reset notes view
+    if (pageId === 'notes') {
+      closeNote();
+    }
+
+    // animate eval bars when teaching is shown
+    if (pageId === 'teaching') {
+      setTimeout(animateEvalBars, 100);
+    }
+
+    // close sidebar on mobile
+    if (window.innerWidth <= 768) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      navigate(link.dataset.page);
+    });
+  });
+
+  // ── PUB FILTER ───────────────────────────────────────────────────
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.pub-entry').forEach(entry => {
+        if (filter === 'all' || entry.dataset.type === filter) {
+          entry.style.display = '';
+        } else {
+          entry.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // ── EVAL BARS ────────────────────────────────────────────────────
+  function animateEvalBars() {
+    document.querySelectorAll('.eval-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }
+
+  // Init bars at 0
+  document.querySelectorAll('.eval-fill').forEach(bar => {
+    bar.style.width = '0';
+  });
+
+  // ── NOTES ────────────────────────────────────────────────────────
+  function openNote(id, e) {
+    if (e) e.preventDefault();
+    const note = notes[id];
+    if (!note) return;
+
+    document.getElementById('notes-list-view').classList.add('hidden');
+    const detail = document.getElementById('note-detail');
+    const content = document.getElementById('note-content');
+
+    content.innerHTML = `
+      <div class="page-header">
+        <div class="subtitle">${note.tag}</div>
+        <h1 style="font-size:1.9rem;">${note.title}</h1>
+        <p style="font-family:var(--font-mono); font-size:.72rem; color:var(--ink-faint); margin-top:.5rem;">${note.date}</p>
+      </div>
+      <div class="note-content-body">${note.body}</div>
+    `;
+
+    detail.classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function closeNote() {
+    document.getElementById('note-detail').classList.remove('visible');
+    document.getElementById('notes-list-view').classList.remove('hidden');
+  }
+
+  // ── MOBILE SIDEBAR ───────────────────────────────────────────────
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Click outside to close
+  document.addEventListener('click', e => {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('menu-toggle');
+    if (window.innerWidth <= 768 &&
+        sidebar.classList.contains('open') &&
+        !sidebar.contains(e.target) &&
+        e.target !== toggle) {
+      sidebar.classList.remove('open');
+    }
+  });
+</script>
+
+</body>
+</html>
